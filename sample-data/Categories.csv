@@ -1,0 +1,8 @@
+categoryId,name,isActive,updatedAt
+CAT-BEV,Minuman,true,2026-04-07T08:00:00.000Z
+CAT-SNK,Snack,true,2026-04-07T08:00:00.000Z
+CAT-MEA,Makanan Beku,true,2026-04-07T08:00:00.000Z
+CAT-INS,Produk Instan,true,2026-04-07T08:00:00.000Z
+CAT-HYG,Kebutuhan Rumah,true,2026-04-07T08:00:00.000Z
+CAT-DRY,Sembako,true,2026-04-07T08:00:00.000Z
+

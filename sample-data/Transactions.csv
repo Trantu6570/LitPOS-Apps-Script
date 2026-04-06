@@ -1,0 +1,7 @@
+timestamp,total,detail,trxId,paymentMethod,itemCount,cashReceived,changeAmount,status
+2026-04-07T01:12:00.000Z,63000,"Kopi Susu Botol (x2), Keripik Singkong Balado (x1), Air Mineral 600ml (x1)",TRX-20260407001,cash,4,100000,37000,Selesai
+2026-04-07T04:25:00.000Z,134000,"Beras Ramos 5kg (x1), Gula Pasir 1kg (x2), Minyak Goreng 1L (x1)",TRX-20260407002,qris,4,,,Selesai
+2026-04-06T10:03:00.000Z,41100,"Mi Instan Goreng (x4), Mi Kuah Kari (x2), Sabun Cuci Piring 800ml (x1)",TRX-20260406001,transfer,7,,,Selesai
+2026-04-05T13:40:00.000Z,98000,"Nasi Goreng Frozen (x2), Sosis Ayam 500gr (x1), Air Mineral 600ml (x2)",TRX-20260405001,cash,5,100000,2000,Selesai
+2026-04-04T09:15:00.000Z,82000,"Biskuit Cokelat (x3), Tisu Wajah 200s (x2), Sabun Cuci Piring 800ml (x1)",TRX-20260404001,ewallet,6,,,Selesai
+
