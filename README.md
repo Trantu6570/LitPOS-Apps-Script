@@ -22,6 +22,7 @@ LitPOS adalah aplikasi POS retail mobile-first berbasis Google Apps Script dan G
 
 - `index.html` untuk UI aplikasi
 - `code.gs` untuk backend Apps Script
+- `payment_gateway_midtrans.gs` untuk modul Midtrans (sandbox/production)
 - `sample-data/` untuk data demo siap import
 - `preview/` untuk screenshot tampilan aplikasi
 
@@ -32,6 +33,50 @@ LitPOS adalah aplikasi POS retail mobile-first berbasis Google Apps Script dan G
 3. Deploy `index.html` dan `code.gs` ke Google Apps Script project.
 4. Jalankan aplikasi sekali agar sheet schema otomatis dibuat.
 5. Import CSV dari folder `sample-data/` jika ingin data awal demo.
+
+## Midtrans Sandbox (Modular GAS)
+
+Integrasi payment gateway Midtrans dipisah ke modul `payment_gateway_midtrans.gs` agar tetap modular namun kompatibel dengan Google Apps Script.
+
+### 1) Isi Script Properties
+
+Di Apps Script: **Project Settings > Script properties**
+
+- `MIDTRANS_SERVER_KEY`: server key sandbox Midtrans (wajib)
+- `MIDTRANS_CLIENT_KEY`: client key sandbox (opsional untuk UI depan)
+- `MIDTRANS_MERCHANT_ID`: merchant id (opsional)
+- `MIDTRANS_MODE`: isi `sandbox` atau `production` (default: `sandbox`)
+- `MIDTRANS_IS_PRODUCTION`: `true/false` (opsional, jika `true` akan override ke production)
+
+Anda juga bisa mengelola properti Midtrans dari UI aplikasi:
+
+- Buka menu **Midtrans Gateway**
+- Simpan mode, merchant ID, client key
+- Update server key via field password (nilai server key lama tidak pernah ditampilkan ke UI)
+- Atau hapus server key dengan opsi **Hapus Server Key Saat Simpan**
+
+### 2) Flow checkout Midtrans
+
+- Pilih metode bayar **Midtrans** di checkout.
+- POS memanggil `createMidtransPayment(payload)`:
+  - create Snap transaction ke Midtrans sandbox (`/snap/v1/transactions`)
+  - simpan transaksi POS dengan status `Menunggu Pembayaran`
+  - reserve stok (tipe move: `SALE_PENDING`)
+- UI akan membuka `redirect_url` Midtrans.
+- Di detail transaksi, klik **Cek Status Midtrans** untuk memanggil `syncMidtransTransactionStatus({ trxId })`.
+
+### 3) Sinkron status transaksi
+
+`syncMidtransTransactionStatus` memanggil Midtrans status endpoint (`/v2/{order_id}/status`) dan update status lokal:
+
+- `settlement` / `capture` -> `Selesai`
+- `pending` -> `Menunggu Pembayaran`
+- `deny` -> `Ditolak`
+- `cancel` -> `Dibatalkan`
+- `expire` -> `Kadaluarsa`
+- `failure` -> `Gagal`
+
+Jika transaksi terminal gagal (deny/cancel/expire/failure), stok reservasi akan dikembalikan otomatis (move: `PAYMENT_RELEASE`).
 
 ## Preview
 
@@ -53,9 +98,26 @@ LitPOS adalah aplikasi POS retail mobile-first berbasis Google Apps Script dan G
 </p>
 <p align="center">
   <img src="preview/Screenshot%202026-04-07%20005506.png" width="220" alt="LitPOS Preview 9" />
+  <img src="preview/Screenshot%202026-04-14%20002644.png" width="220" alt="LitPOS Preview 10" />
+</p>
+<p align="center">
+  <img src="preview/Screenshot%202026-04-14%20002629.png" width="220" alt="LitPOS Preview 11" />
+  <img src="preview/Screenshot%202026-04-14%20002606.png" width="220" alt="LitPOS Preview 12" />
+</p>
+<p align="center">
+  <img src="preview/Screenshot%202026-04-14%20002542.png" width="220" alt="LitPOS Preview 13" />
+  <img src="preview/Screenshot%202026-04-14%20002439.png" width="220" alt="LitPOS Preview 14" />
+</p>
+<p align="center">
+  <img src="preview/Screenshot%202026-04-14%20001540.png" width="220" alt="LitPOS Preview 15" />
 </p>
 
 ## Sample Data
 
 Panduan import data demo ada di [`sample-data/README.md`](sample-data/README.md).
 
+## Komunitas
+
+Mau belajar Google Apps Script bareng-bareng? Yuk gabung grup WhatsApp:
+
+https://chat.whatsapp.com/HhXHuhvQtQYAnRtR8uCil5?mode=gi_t

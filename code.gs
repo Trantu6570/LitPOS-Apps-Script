@@ -3,7 +3,7 @@ const SPREADSHEET_ID = '';
 const SHEET_HEADERS = {
   Items: ['id', 'name', 'category', 'price', 'sku', 'barcode', 'stockQty', 'minStock', 'isActive', 'updatedAt'],
   Categories: ['categoryId', 'name', 'isActive', 'updatedAt'],
-  Transactions: ['timestamp', 'total', 'detail', 'trxId', 'paymentMethod', 'itemCount', 'cashReceived', 'changeAmount', 'status'],
+  Transactions: ['timestamp', 'total', 'detail', 'trxId', 'paymentMethod', 'itemCount', 'cashReceived', 'changeAmount', 'status', 'gatewayProvider', 'gatewayOrderId', 'gatewayTransactionId', 'gatewayPaymentType', 'gatewayStatus', 'gatewayToken', 'gatewayRedirectUrl', 'gatewayRaw', 'paidAt'],
   TransactionItems: ['trxId', 'itemId', 'nameSnapshot', 'qty', 'price', 'subtotal'],
   InventoryMoves: ['moveId', 'createdAt', 'itemId', 'type', 'qtyDelta', 'beforeQty', 'afterQty', 'referenceId', 'note'],
   Settings: ['key', 'value']
@@ -16,11 +16,11 @@ const DEFAULT_SETTINGS = {
   receiptFooter: 'Terima kasih sudah berbelanja.'
 };
 
-const PAYMENT_METHODS = ['cash', 'qris', 'transfer', 'ewallet'];
+const PAYMENT_METHODS = ['cash', 'qris', 'transfer', 'ewallet', 'midtrans'];
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('index')
-    .setTitle('Kasira POS Retail')
+    .setTitle('LitPOS')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
 }
 
@@ -37,7 +37,8 @@ function getAppBootstrapData() {
       categories: inventory.categories.map(mapCategoryForClient_),
       items: inventory.items.map(mapItemForClient_),
       transactions: transactions,
-      dashboard: mapDashboardForClient_(dashboard)
+      dashboard: mapDashboardForClient_(dashboard),
+      paymentGateway: buildPaymentGatewayBootstrap_()
     });
   });
 }
@@ -52,6 +53,151 @@ function saveSale(payload) {
       const sale = validateSalePayload_(context, payload || {});
       const result = persistSale_(context, sale);
       return buildResponse_(true, 'Transaksi berhasil disimpan.', result);
+    } finally {
+      lock.releaseLock();
+    }
+  });
+}
+
+function createMidtransPayment(payload) {
+  return executeSafely_(function () {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(20000);
+
+    try {
+      const context = ensureSchema_();
+      const salePayload = payload || {};
+      salePayload.paymentMethod = 'midtrans';
+
+      const sale = validateSalePayload_(context, salePayload);
+      const trxId = generateId_('TRX');
+      const storeInfo = getStoreSettings_(context);
+      const snapPayload = buildMidtransSnapPayload_(sale, storeInfo, trxId);
+      const snap = KasiraModules.MidtransGateway.createSnapTransaction(snapPayload);
+
+      const result = persistSale_(context, sale, {
+        trxId: trxId,
+        paymentMethod: 'midtrans',
+        status: 'Menunggu Pembayaran',
+        deductStock: true,
+        inventoryMoveType: 'SALE_PENDING',
+        inventoryNote: 'Reservasi stok - Midtrans pending',
+        gateway: {
+          provider: 'midtrans',
+          orderId: trxId,
+          transactionId: '',
+          paymentType: '',
+          status: 'pending',
+          token: snap.token,
+          redirectUrl: snap.redirectUrl,
+          raw: snap.raw
+        },
+        paidAt: ''
+      });
+
+      result.paymentSession = {
+        orderId: trxId,
+        token: snap.token,
+        redirectUrl: snap.redirectUrl
+      };
+
+      return buildResponse_(true, 'Transaksi Midtrans berhasil dibuat.', result);
+    } finally {
+      lock.releaseLock();
+    }
+  });
+}
+
+function syncMidtransTransactionStatus(payload) {
+  return executeSafely_(function () {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(20000);
+
+    try {
+      const context = ensureSchema_();
+      const trxId = typeof payload === 'object' && payload !== null
+        ? stringValue_(payload.trxId)
+        : stringValue_(payload);
+
+      if (!trxId) {
+        throw new Error('trxId wajib diisi.');
+      }
+
+      const transactionRows = readSheetObjects_(context.Transactions.sheet);
+      const targetRow = transactionRows.find(function (row) {
+        return stringValue_(row.trxId) === trxId;
+      });
+
+      if (!targetRow) {
+        throw new Error('Transaksi tidak ditemukan.');
+      }
+
+      const transaction = normalizeTransactionRecord_(targetRow);
+      if (transaction.paymentMethod !== 'midtrans') {
+        throw new Error('Transaksi ini bukan transaksi Midtrans.');
+      }
+
+      const orderId = transaction.gateway.orderId || transaction.trxId;
+      const statusPayload = KasiraModules.MidtransGateway.getTransactionStatus(orderId);
+      const mapped = KasiraModules.MidtransGateway.mapTransactionState(statusPayload.transaction_status, statusPayload.fraud_status);
+      const previousStatus = stringValue_(transaction.status);
+      const isFailure = !!mapped.isFailure;
+
+      if (previousStatus === 'Menunggu Pembayaran' && isFailure) {
+        releaseReservedStockForTransaction_(context, transaction.trxId, 'Midtrans ' + mapped.localStatus);
+      }
+
+      let nextStatus = mapped.localStatus;
+      if (mapped.isPaid && mapped.localStatus !== 'Refund' && mapped.localStatus !== 'Refund Sebagian') {
+        nextStatus = 'Selesai';
+      }
+
+      const paidAtValue = mapped.isPaid && nextStatus === 'Selesai'
+        ? (transaction.paidAt || safeIsoString_(new Date()))
+        : transaction.paidAt;
+
+      writeObjectToExistingRow_(context.Transactions.sheet, context.Transactions.headers, targetRow._rowNumber, {
+        status: nextStatus,
+        gatewayProvider: 'midtrans',
+        gatewayOrderId: orderId,
+        gatewayTransactionId: stringValue_(statusPayload.transaction_id),
+        gatewayPaymentType: stringValue_(statusPayload.payment_type),
+        gatewayStatus: stringValue_(statusPayload.transaction_status),
+        gatewayRaw: JSON.stringify(statusPayload || {}),
+        paidAt: paidAtValue ? parseDate_(paidAtValue) || paidAtValue : ''
+      });
+
+      const refreshedTransactionRows = readSheetObjects_(context.Transactions.sheet);
+      const refreshedRaw = refreshedTransactionRows.find(function (row) {
+        return stringValue_(row.trxId) === trxId;
+      }) || targetRow;
+      const refreshed = normalizeTransactionRecord_(refreshedRaw);
+      const items = readSheetObjects_(context.TransactionItems.sheet)
+        .filter(function (row) { return stringValue_(row.trxId) === trxId; })
+        .map(function (row) {
+          return {
+            itemId: stringValue_(row.itemId),
+            name: stringValue_(row.nameSnapshot),
+            qty: normalizeInteger_(row.qty, 0),
+            price: normalizeMoney_(row.price),
+            subtotal: normalizeMoney_(row.subtotal)
+          };
+        });
+
+      return buildResponse_(true, 'Status Midtrans berhasil diperbarui.', {
+        trxId: refreshed.trxId,
+        timestamp: refreshed.timestamp,
+        total: refreshed.total,
+        itemCount: refreshed.itemCount,
+        paymentMethod: refreshed.paymentMethod,
+        status: refreshed.status,
+        cashReceived: refreshed.cashReceived,
+        changeAmount: refreshed.changeAmount,
+        paidAt: refreshed.paidAt,
+        items: items,
+        gateway: refreshed.gateway,
+        storeInfo: getStoreSettings_(context)
+      });
     } finally {
       lock.releaseLock();
     }
@@ -313,6 +459,28 @@ function saveStoreSettings(payload) {
 
     upsertSettings_(context.Settings.sheet, nextSettings);
     return buildResponse_(true, 'Pengaturan toko berhasil disimpan.', mapStoreForClient_(nextSettings));
+  });
+}
+
+function getMidtransSettings() {
+  return executeSafely_(function () {
+    if (typeof KasiraModules === 'undefined' || !KasiraModules.MidtransGateway) {
+      throw new Error('Modul Midtrans tidak tersedia.');
+    }
+
+    const settings = KasiraModules.MidtransGateway.getAdminConfig();
+    return buildResponse_(true, 'Pengaturan Midtrans berhasil dimuat.', settings);
+  });
+}
+
+function saveMidtransSettings(payload) {
+  return executeSafely_(function () {
+    if (typeof KasiraModules === 'undefined' || !KasiraModules.MidtransGateway) {
+      throw new Error('Modul Midtrans tidak tersedia.');
+    }
+
+    const saved = KasiraModules.MidtransGateway.saveAdminConfig(payload || {});
+    return buildResponse_(true, 'Pengaturan Midtrans berhasil disimpan.', saved);
   });
 }
 
@@ -650,6 +818,35 @@ function mapStoreForClient_(storeInfo) {
   };
 }
 
+function buildPaymentGatewayBootstrap_() {
+  const fallback = {
+    midtrans: {
+      enabled: false,
+      mode: 'sandbox',
+      merchantId: '',
+      clientKey: '',
+      clientKeyConfigured: false,
+      serverKeyConfigured: false
+    }
+  };
+
+  if (typeof KasiraModules === 'undefined' || !KasiraModules.MidtransGateway) {
+    return fallback;
+  }
+
+  const midtransConfig = KasiraModules.MidtransGateway.getPublicConfig();
+  return {
+    midtrans: {
+      enabled: !!midtransConfig.enabled,
+      mode: midtransConfig.mode || 'sandbox',
+      merchantId: midtransConfig.merchantId || '',
+      clientKey: midtransConfig.clientKey || '',
+      clientKeyConfigured: !!midtransConfig.clientKeyConfigured,
+      serverKeyConfigured: !!midtransConfig.serverKeyConfigured
+    }
+  };
+}
+
 function mapCategoryForClient_(category) {
   if (!category) {
     return null;
@@ -752,6 +949,8 @@ function buildTransactionsForClient_(context, filters) {
       cashReceived: transaction.cashReceived,
       changeAmount: transaction.changeAmount,
       status: transaction.status,
+      paidAt: transaction.paidAt || '',
+      gateway: transaction.gateway || null,
       legacy: !!transaction.legacy,
       items: items
     };
@@ -831,25 +1030,168 @@ function validateSalePayload_(context, payload) {
   };
 }
 
-function persistSale_(context, sale) {
+function buildMidtransSnapPayload_(sale, storeInfo, orderId) {
+  const details = sale || {};
+  const targetOrderId = stringValue_(orderId);
+  if (!targetOrderId) {
+    throw new Error('Order ID Midtrans tidak valid.');
+  }
+
+  const itemDetails = (details.items || []).map(function (item) {
+    return {
+      id: stringValue_(item.itemId) || generateId_('ITEM'),
+      price: normalizeMoney_(item.price),
+      quantity: normalizeInteger_(item.qty, 0),
+      name: trimToMaxLength_(stringValue_(item.nameSnapshot) || 'Produk POS', 50)
+    };
+  });
+
+  const customerDetails = {
+    first_name: trimToMaxLength_(stringValue_(storeInfo && storeInfo.storeName) || 'Pelanggan POS', 100),
+    phone: stringValue_(storeInfo && storeInfo.storePhone)
+  };
+
+  if (!customerDetails.phone) {
+    delete customerDetails.phone;
+  }
+
+  return {
+    transaction_details: {
+      order_id: targetOrderId,
+      gross_amount: normalizeMoney_(details.total)
+    },
+    item_details: itemDetails,
+    customer_details: customerDetails,
+    custom_field1: targetOrderId,
+    custom_field2: 'Kasira POS'
+  };
+}
+
+function normalizeGatewayPayload_(gateway) {
+  const source = gateway || {};
+  const rawValue = source.raw;
+  const rawString = typeof rawValue === 'string' ? rawValue : JSON.stringify(rawValue || {});
+  return {
+    provider: stringValue_(source.provider),
+    orderId: stringValue_(source.orderId),
+    transactionId: stringValue_(source.transactionId),
+    paymentType: stringValue_(source.paymentType),
+    status: stringValue_(source.status),
+    token: stringValue_(source.token),
+    redirectUrl: stringValue_(source.redirectUrl),
+    raw: rawString === '{}' ? '' : rawString
+  };
+}
+
+function releaseReservedStockForTransaction_(context, trxId, reason) {
+  const targetTrxId = stringValue_(trxId);
+  if (!targetTrxId) {
+    throw new Error('trxId tidak valid untuk release stok.');
+  }
+
+  const transactionItems = readSheetObjects_(context.TransactionItems.sheet)
+    .filter(function (row) {
+      return stringValue_(row.trxId) === targetTrxId;
+    });
+
+  if (transactionItems.length === 0) {
+    return;
+  }
+
+  const inventory = getInventoryContext_(context);
+  const itemHeaders = context.Items.headers;
+  const itemsSheet = context.Items.sheet;
   const now = new Date();
-  const trxId = generateId_('TRX');
+  const inventoryRows = [];
+  const qtyByItemId = {};
+
+  transactionItems.forEach(function (row) {
+    const itemId = stringValue_(row.itemId);
+    const qty = normalizeInteger_(row.qty, 0);
+    if (!itemId || qty <= 0) {
+      return;
+    }
+    if (!qtyByItemId[itemId]) {
+      qtyByItemId[itemId] = 0;
+    }
+    qtyByItemId[itemId] += qty;
+  });
+
+  Object.keys(qtyByItemId).forEach(function (itemId) {
+    const qty = qtyByItemId[itemId];
+    const item = inventory.itemIndex[itemId];
+
+    if (!item || qty <= 0) {
+      return;
+    }
+
+    const beforeQty = item.stockManaged ? item.stockQty : 0;
+    const afterQty = item.stockManaged ? (beforeQty + qty) : 0;
+
+    if (item.stockManaged) {
+      writeObjectToExistingRow_(itemsSheet, itemHeaders, item._rowNumber, {
+        stockQty: afterQty,
+        updatedAt: now
+      });
+    }
+
+    inventoryRows.push({
+      moveId: generateId_('MOVE'),
+      createdAt: now,
+      itemId: itemId,
+      type: 'PAYMENT_RELEASE',
+      qtyDelta: qty,
+      beforeQty: item.stockManaged ? beforeQty : '',
+      afterQty: item.stockManaged ? afterQty : '',
+      referenceId: targetTrxId,
+      note: stringValue_(reason) || 'Release stok karena pembayaran tidak berhasil'
+    });
+  });
+
+  if (inventoryRows.length > 0) {
+    appendObjectRows_(context.InventoryMoves.sheet, context.InventoryMoves.headers, inventoryRows);
+  }
+}
+
+function persistSale_(context, sale, options) {
+  const persistOptions = options || {};
+  const now = new Date();
+  const trxId = stringValue_(persistOptions.trxId) || generateId_('TRX');
+  const paymentMethod = stringValue_(persistOptions.paymentMethod) || sale.paymentMethod;
+  const status = stringValue_(persistOptions.status) || 'Selesai';
+  const deductStock = Object.prototype.hasOwnProperty.call(persistOptions, 'deductStock')
+    ? !!persistOptions.deductStock
+    : true;
+  const inventoryMoveType = stringValue_(persistOptions.inventoryMoveType) || 'SALE';
+  const inventoryNote = stringValue_(persistOptions.inventoryNote) || 'Penjualan POS';
+  const paidAtInput = Object.prototype.hasOwnProperty.call(persistOptions, 'paidAt')
+    ? persistOptions.paidAt
+    : (status === 'Selesai' ? now : '');
+  const paidAtDate = parseDate_(paidAtInput);
+  const gateway = normalizeGatewayPayload_(persistOptions.gateway);
   const detailString = sale.items.map(function (item) {
     return item.nameSnapshot + ' (x' + item.qty + ')';
   }).join(', ');
-  const itemHeaders = context.Items.headers;
-  const itemsSheet = context.Items.sheet;
 
   appendObjectRows_(context.Transactions.sheet, context.Transactions.headers, [{
     timestamp: now,
     total: sale.total,
     detail: detailString,
     trxId: trxId,
-    paymentMethod: sale.paymentMethod,
+    paymentMethod: paymentMethod,
     itemCount: sale.itemCount,
     cashReceived: sale.cashReceived,
     changeAmount: sale.changeAmount,
-    status: 'Selesai'
+    status: status,
+    gatewayProvider: gateway.provider,
+    gatewayOrderId: gateway.orderId,
+    gatewayTransactionId: gateway.transactionId,
+    gatewayPaymentType: gateway.paymentType,
+    gatewayStatus: gateway.status,
+    gatewayToken: gateway.token,
+    gatewayRedirectUrl: gateway.redirectUrl,
+    gatewayRaw: gateway.raw,
+    paidAt: paidAtDate || ''
   }]);
 
   appendObjectRows_(context.TransactionItems.sheet, context.TransactionItems.headers, sale.items.map(function (item) {
@@ -863,29 +1205,35 @@ function persistSale_(context, sale) {
     };
   }));
 
-  const inventoryRows = [];
-  sale.items.forEach(function (item) {
-    if (item.stockManaged) {
-      writeObjectToExistingRow_(itemsSheet, itemHeaders, item.rowNumber, {
-        stockQty: item.afterQty,
-        updatedAt: now
+  if (deductStock) {
+    const itemHeaders = context.Items.headers;
+    const itemsSheet = context.Items.sheet;
+    const inventoryRows = [];
+
+    sale.items.forEach(function (item) {
+      if (item.stockManaged) {
+        writeObjectToExistingRow_(itemsSheet, itemHeaders, item.rowNumber, {
+          stockQty: item.afterQty,
+          updatedAt: now
+        });
+      }
+
+      inventoryRows.push({
+        moveId: generateId_('MOVE'),
+        createdAt: now,
+        itemId: item.itemId,
+        type: inventoryMoveType,
+        qtyDelta: item.qty * -1,
+        beforeQty: item.stockManaged ? item.beforeQty : '',
+        afterQty: item.stockManaged ? item.afterQty : '',
+        referenceId: trxId,
+        note: inventoryNote
       });
-    }
-
-    inventoryRows.push({
-      moveId: generateId_('MOVE'),
-      createdAt: now,
-      itemId: item.itemId,
-      type: 'SALE',
-      qtyDelta: item.qty * -1,
-      beforeQty: item.stockManaged ? item.beforeQty : '',
-      afterQty: item.stockManaged ? item.afterQty : '',
-      referenceId: trxId,
-      note: 'Penjualan POS'
     });
-  });
 
-  appendObjectRows_(context.InventoryMoves.sheet, context.InventoryMoves.headers, inventoryRows);
+    appendObjectRows_(context.InventoryMoves.sheet, context.InventoryMoves.headers, inventoryRows);
+  }
+
   SpreadsheetApp.flush();
 
   return {
@@ -893,10 +1241,20 @@ function persistSale_(context, sale) {
     timestamp: safeIsoString_(now),
     total: sale.total,
     itemCount: sale.itemCount,
-    paymentMethod: sale.paymentMethod,
+    paymentMethod: paymentMethod,
     cashReceived: sale.cashReceived === '' ? null : sale.cashReceived,
     changeAmount: sale.changeAmount === '' ? null : sale.changeAmount,
-    status: 'Selesai',
+    status: status,
+    paidAt: paidAtDate ? safeIsoString_(paidAtDate) : '',
+    gateway: {
+      provider: gateway.provider,
+      orderId: gateway.orderId,
+      transactionId: gateway.transactionId,
+      paymentType: gateway.paymentType,
+      status: gateway.status,
+      token: gateway.token,
+      redirectUrl: gateway.redirectUrl
+    },
     items: sale.items.map(function (item) {
       return {
         itemId: item.itemId,
@@ -926,6 +1284,7 @@ function getTransactionsInternal_(context, filters) {
 
 function normalizeTransactionRecord_(row) {
   const timestamp = parseDate_(row.timestamp);
+  const paidAt = parseDate_(row.paidAt);
   const detail = stringValue_(row.detail);
   const legacyItems = parseLegacyDetail_(detail);
   const transactionId = stringValue_(row.trxId) || buildLegacyTransactionId_(row._rowNumber);
@@ -943,6 +1302,17 @@ function normalizeTransactionRecord_(row) {
     cashReceived: row.cashReceived === '' || row.cashReceived === null ? null : normalizeMoney_(row.cashReceived),
     changeAmount: row.changeAmount === '' || row.changeAmount === null ? null : normalizeMoney_(row.changeAmount),
     status: stringValue_(row.status) || 'Selesai',
+    paidAt: safeIsoString_(paidAt),
+    gateway: {
+      provider: stringValue_(row.gatewayProvider),
+      orderId: stringValue_(row.gatewayOrderId),
+      transactionId: stringValue_(row.gatewayTransactionId),
+      paymentType: stringValue_(row.gatewayPaymentType),
+      status: stringValue_(row.gatewayStatus),
+      token: stringValue_(row.gatewayToken),
+      redirectUrl: stringValue_(row.gatewayRedirectUrl)
+    },
+    gatewayRaw: stringValue_(row.gatewayRaw),
     legacy: stringValue_(row.trxId) === ''
   };
 }
@@ -967,7 +1337,8 @@ function filterTransactions_(transactions, filters) {
 
 function buildDashboardSummary_(context, items) {
   const todaysTransactions = getTransactionsInternal_(context, { range: 'today' });
-  const salesToday = todaysTransactions.reduce(function (sum, transaction) {
+  const successfulTransactions = todaysTransactions.filter(isSuccessfulTransaction_);
+  const salesToday = successfulTransactions.reduce(function (sum, transaction) {
     return sum + normalizeMoney_(transaction.total);
   }, 0);
   const lowStockItems = items.filter(function (item) {
@@ -976,16 +1347,17 @@ function buildDashboardSummary_(context, items) {
 
   return {
     salesToday: salesToday,
-    transactionsToday: todaysTransactions.length,
+    transactionsToday: successfulTransactions.length,
     lowStockCount: lowStockItems.length,
     activeItemCount: items.filter(function (item) { return item.isActive; }).length,
     lowStockItems: lowStockItems.slice(0, 5),
-    recentTransactions: todaysTransactions.slice(0, 5)
+    recentTransactions: successfulTransactions.slice(0, 5)
   };
 }
 
 function buildReportSummary_(context, items, range) {
   const transactions = getTransactionsInternal_(context, { range: range || 'today' });
+  const successfulTransactions = transactions.filter(isSuccessfulTransaction_);
   const transactionItems = readSheetObjects_(context.TransactionItems.sheet);
   const transactionIdMap = {};
   const topProductMap = {};
@@ -994,10 +1366,11 @@ function buildReportSummary_(context, items, range) {
     qris: 0,
     transfer: 0,
     ewallet: 0,
+    midtrans: 0,
     legacy: 0
   };
 
-  transactions.forEach(function (transaction) {
+  successfulTransactions.forEach(function (transaction) {
     transactionIdMap[transaction.trxId] = transaction;
     if (!paymentBreakdown.hasOwnProperty(transaction.paymentMethod)) {
       paymentBreakdown[transaction.paymentMethod] = 0;
@@ -1027,7 +1400,7 @@ function buildReportSummary_(context, items, range) {
     topProductMap[name].revenue += subtotal;
   });
 
-  transactions.forEach(function (transaction) {
+  successfulTransactions.forEach(function (transaction) {
     if (transaction.legacy) {
       parseLegacyDetail_(transaction.detail).forEach(function (entry) {
         if (!topProductMap[entry.name]) {
@@ -1042,15 +1415,15 @@ function buildReportSummary_(context, items, range) {
     }
   });
 
-  const totalRevenue = transactions.reduce(function (sum, transaction) {
+  const totalRevenue = successfulTransactions.reduce(function (sum, transaction) {
     return sum + transaction.total;
   }, 0);
 
   return {
     range: range || 'today',
     totalRevenue: totalRevenue,
-    totalTransactions: transactions.length,
-    averageBasket: transactions.length > 0 ? Math.round(totalRevenue / transactions.length) : 0,
+    totalTransactions: successfulTransactions.length,
+    averageBasket: successfulTransactions.length > 0 ? Math.round(totalRevenue / successfulTransactions.length) : 0,
     paymentBreakdown: paymentBreakdown,
     topProducts: Object.keys(topProductMap).map(function (key) {
       return topProductMap[key];
@@ -1064,6 +1437,11 @@ function buildReportSummary_(context, items, range) {
       return item.stockManaged && item.stockQty <= item.minStock;
     }).slice(0, 10)
   };
+}
+
+function isSuccessfulTransaction_(transaction) {
+  const status = stringValue_(transaction && transaction.status).toLowerCase();
+  return status === 'selesai';
 }
 
 function parseLegacyDetail_(detailString) {
@@ -1154,6 +1532,15 @@ function stringValue_(value) {
     return '';
   }
   return String(value).trim();
+}
+
+function trimToMaxLength_(value, maxLength) {
+  const text = stringValue_(value);
+  const limit = normalizeInteger_(maxLength, 0);
+  if (limit <= 0 || text.length <= limit) {
+    return text;
+  }
+  return text.slice(0, limit);
 }
 
 function normalizeMoney_(value) {

@@ -32,7 +32,7 @@
     <div id="page-dashboard" class="page active"><div class="dash-summary"><div class="stat-card"><div style="font-size:13px;opacity:.9;">Penjualan Hari Ini</div><div class="stat-val" id="dash-sales">Rp 0</div></div><div class="stat-card secondary"><div style="font-size:13px;color:var(--text-mid);">Total Transaksi</div><div class="stat-val" id="dash-trx" style="color:var(--text-dark);">0</div></div></div><h3 class="mb-2" style="font-size:15px;">Aksi Cepat</h3><div class="menu-grid mb-4"><div class="menu-item" data-action="switchPage" data-page="pos"><span class="material-symbols-rounded">point_of_sale</span><span>Kasir Baru</span></div><div class="menu-item" data-action="openSubPage" data-sub="sub-produk"><span class="material-symbols-rounded">inventory_2</span><span>Kelola Item</span></div><div class="menu-item" data-action="openSubPage" data-sub="sub-laporan"><span class="material-symbols-rounded">assessment</span><span>Laporan</span></div></div><div class="flex justify-between items-center mb-2"><h3 style="font-size:15px;">Peringatan Stok</h3><span class="text-primary" style="font-size:12px;font-weight:600;cursor:pointer;" data-action="openSubPage" data-sub="sub-stok">Lihat Semua</span></div><div id="dash-alerts"></div></div>
     <div id="page-pos" class="page"><div class="search-bar"><span class="material-symbols-rounded">search</span><input type="text" id="pos-search" placeholder="Cari nama produk..." data-input="posSearch"></div><div class="category-scroll" id="pos-categories"></div><div class="grid-2" id="pos-grid"></div></div>
     <div id="page-history" class="page"><div class="search-bar"><span class="material-symbols-rounded">search</span><input type="text" id="history-search" placeholder="Cari ID Transaksi..." data-input="historySearch"></div><div id="history-list"></div></div>
-    <div id="page-menu" class="page"><div class="card mb-4" style="text-align:center;padding:24px;"><div style="width:64px;height:64px;border-radius:50%;background:var(--feedback-warning-bg);color:var(--primary-main);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;" id="store-initials">KS</div><h2 id="store-name-display" style="font-size:18px;">Kasira POS</h2><p class="text-mid" style="font-size:13px;" id="store-address-display">Setup alamat di pengaturan</p></div><h3 class="mb-2" style="font-size:14px;text-transform:uppercase;color:var(--text-light);letter-spacing:1px;">Manajemen Toko</h3><div class="list-card" data-action="openSubPage" data-sub="sub-produk"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">inventory_2</span></div><span style="font-weight:600;">Produk & Item</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-kategori"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">category</span></div><span style="font-weight:600;">Kategori</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-stok"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">shelves</span></div><span style="font-weight:600;">Inventaris Stok</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><h3 class="mb-2 mt-4" style="font-size:14px;text-transform:uppercase;color:var(--text-light);letter-spacing:1px;">Sistem</h3><div class="list-card" data-action="openSubPage" data-sub="sub-laporan"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#e8f5e9;border-radius:8px;"><span class="material-symbols-rounded" style="color:#2e7d32;">assessment</span></div><span style="font-weight:600;">Laporan Penjualan</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-pengaturan"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#fff4e5;border-radius:8px;"><span class="material-symbols-rounded" style="color:#e65100;">settings</span></div><span style="font-weight:600;">Pengaturan Aplikasi</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div></div>
+    <div id="page-menu" class="page"><div class="card mb-4" style="text-align:center;padding:24px;"><div style="width:64px;height:64px;border-radius:50%;background:var(--feedback-warning-bg);color:var(--primary-main);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;" id="store-initials">KS</div><h2 id="store-name-display" style="font-size:18px;">Kasira POS</h2><p class="text-mid" style="font-size:13px;" id="store-address-display">Setup alamat di pengaturan</p></div><h3 class="mb-2" style="font-size:14px;text-transform:uppercase;color:var(--text-light);letter-spacing:1px;">Manajemen Toko</h3><div class="list-card" data-action="openSubPage" data-sub="sub-produk"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">inventory_2</span></div><span style="font-weight:600;">Produk & Item</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-kategori"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">category</span></div><span style="font-weight:600;">Kategori</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-stok"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#f0efff;border-radius:8px;"><span class="material-symbols-rounded text-primary">shelves</span></div><span style="font-weight:600;">Inventaris Stok</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><h3 class="mb-2 mt-4" style="font-size:14px;text-transform:uppercase;color:var(--text-light);letter-spacing:1px;">Sistem</h3><div class="list-card" data-action="openSubPage" data-sub="sub-laporan"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#e8f5e9;border-radius:8px;"><span class="material-symbols-rounded" style="color:#2e7d32;">assessment</span></div><span style="font-weight:600;">Laporan Penjualan</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-pengaturan"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#fff4e5;border-radius:8px;"><span class="material-symbols-rounded" style="color:#e65100;">settings</span></div><span style="font-weight:600;">Pengaturan Aplikasi</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div><div class="list-card" data-action="openSubPage" data-sub="sub-midtrans"><div class="flex items-center gap-3"><div class="btn-icon" style="background:#e3f2fd;border-radius:8px;"><span class="material-symbols-rounded" style="color:#1565c0;">account_balance</span></div><span style="font-weight:600;">Midtrans Gateway</span></div><span class="material-symbols-rounded text-light">chevron_right</span></div></div>
     <div id="fab-cart" class="fab-cart" data-action="checkout"><div class="flex items-center gap-3"><div class="fab-badge" id="fab-count">0</div><div style="font-weight:600;font-size:15px;" id="fab-total">Rp 0</div></div><div class="flex items-center" style="font-weight:600;font-size:14px;">Checkout <span class="material-symbols-rounded" style="font-size:20px;">chevron_right</span></div></div>
     <div class="bottom-nav-container" id="bottom-nav"><div class="bottom-nav"><div class="nav-btn active" data-nav="dashboard" data-action="switchPage" data-page="dashboard"><span class="material-symbols-rounded">dashboard</span></div><div class="nav-btn" data-nav="pos" data-action="switchPage" data-page="pos"><span class="material-symbols-rounded">point_of_sale</span></div><div class="nav-btn" data-nav="history" data-action="switchPage" data-page="history"><span class="material-symbols-rounded">receipt_long</span></div><div class="nav-btn" data-nav="menu" data-action="switchPage" data-page="menu"><span class="material-symbols-rounded">menu</span></div></div></div>
     <div id="sub-produk" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">arrow_back</span></button><h2 class="header-title">Daftar Produk</h2><button class="btn-icon" data-action="openSubPage" data-sub="sub-produk-form"><span class="material-symbols-rounded">add</span></button></div><div class="sub-content"><div class="search-bar"><span class="material-symbols-rounded">search</span><input type="text" id="prod-search" placeholder="Cari SKU atau Nama..." data-input="prodSearch"></div><div id="produk-list-container"></div></div></div>
@@ -43,9 +43,10 @@
     <div id="sub-stok-adjust" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">close</span></button><h2 class="header-title">Penyesuaian Stok</h2><div style="width:32px"></div></div><div class="sub-content"><div class="card mb-4 text-center"><h3 id="adj-item-name">Nama Item</h3><p class="text-mid" style="font-size:13px;" id="adj-item-sku">SKU: -</p><div style="font-size:32px;font-weight:700;color:var(--primary-main);margin-top:8px;" id="adj-current-stock">0</div><div style="font-size:12px;color:var(--text-mid);">Stok Saat Ini</div></div><input type="hidden" id="f-adj-id"><div class="form-group"><label class="form-label">Jenis Penyesuaian</label><div class="flex gap-2"><button class="btn-outline" id="btn-adj-add" style="background:var(--primary-main);color:white;" data-action="setAdjType" data-val="add">Tambah (+)</button><button class="btn-outline" id="btn-adj-sub" data-action="setAdjType" data-val="sub">Kurangi (-)</button></div><input type="hidden" id="f-adj-type" value="add"></div><div class="form-group"><label class="form-label">Jumlah (Qty) *</label><input type="number" id="f-adj-qty" class="form-input" placeholder="0" min="1"></div><div class="form-group"><label class="form-label">Catatan</label><input type="text" id="f-adj-note" class="form-input" placeholder="Cth: Stok masuk dari supplier"></div><button class="btn-main mt-4" data-action="submitAdjustStock">Simpan Penyesuaian</button></div></div>
     <div id="sub-laporan" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">arrow_back</span></button><h2 class="header-title">Laporan Penjualan</h2><button class="btn-icon" data-action="refreshData"><span class="material-symbols-rounded">sync</span></button></div><div class="sub-content" id="laporan-container"></div></div>
     <div id="sub-pengaturan" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">arrow_back</span></button><h2 class="header-title">Pengaturan Toko</h2><div style="width:32px"></div></div><div class="sub-content"><div class="form-group"><label class="form-label">Nama Toko *</label><input type="text" id="f-set-name" class="form-input"></div><div class="form-group"><label class="form-label">Alamat Lengkap</label><textarea id="f-set-address" class="form-input" rows="3" style="resize:none;"></textarea></div><div class="form-group"><label class="form-label">Nomor Telepon</label><input type="tel" id="f-set-phone" class="form-input"></div><div class="form-group"><label class="form-label">Catatan Kaki Struk</label><input type="text" id="f-set-footer" class="form-input" placeholder="Terima kasih atas kunjungan Anda"></div><button class="btn-main mt-4" data-action="submitSettings">Simpan Pengaturan</button></div></div>
+    <div id="sub-midtrans" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">arrow_back</span></button><h2 class="header-title">Midtrans Gateway</h2><button class="btn-icon" data-action="loadMidtransSettings"><span class="material-symbols-rounded">sync</span></button></div><div class="sub-content"><div class="card mb-4"><div class="flex justify-between items-center mb-2"><span style="font-size:12px;color:var(--text-mid);">Status Koneksi</span><span class="tag" id="f-mid-status-tag">-</span></div><div class="flex justify-between items-center mb-2"><span style="font-size:12px;color:var(--text-mid);">Server Key</span><span style="font-size:12px;font-weight:600;" id="f-mid-server-configured">Belum</span></div><div class="flex justify-between items-center"><span style="font-size:12px;color:var(--text-mid);">Mode</span><span style="font-size:12px;font-weight:600;text-transform:uppercase;" id="f-mid-mode-label">SANDBOX</span></div></div><div class="form-group"><label class="form-label">Mode Midtrans</label><select id="f-mid-mode" class="form-select"><option value="sandbox">Sandbox</option><option value="production">Production</option></select></div><div class="form-group"><label class="form-label">Merchant ID</label><input type="text" id="f-mid-merchant-id" class="form-input" placeholder="Contoh: G123456789"></div><div class="form-group"><label class="form-label">Client Key</label><input type="text" id="f-mid-client-key" class="form-input" placeholder="SB-Mid-client-..."></div><div class="form-group"><label class="form-label">Server Key (Opsional untuk update)</label><input type="password" id="f-mid-server-key" class="form-input" placeholder="Isi hanya jika ingin mengganti server key"></div><div class="form-group flex items-center justify-between" style="padding:8px 0 16px;"><label class="form-label" style="margin:0;">Hapus Server Key Saat Simpan</label><input type="checkbox" id="f-mid-clear-server" style="width:20px;height:20px;"></div><button class="btn-main" data-action="submitMidtransSettings">Simpan Midtrans</button></div></div>
     <div id="sub-tx-detail" class="sub-page"><div class="sub-header"><button class="btn-back" data-action="closeSubPage"><span class="material-symbols-rounded">arrow_back</span></button><h2 class="header-title" id="tx-detail-title">Detail Transaksi</h2><div style="width:32px"></div></div><div class="sub-content" id="tx-detail-container"></div></div>
     <div class="overlay" id="global-overlay" data-action="closeOverlays"></div>
-    <div class="bottom-sheet" id="checkout-sheet"><div class="sheet-header"><h2 style="font-size:16px;" id="co-item-count">Checkout</h2><button class="btn-icon" data-action="closeOverlays"><span class="material-symbols-rounded">close</span></button></div><div class="sheet-body"><div id="co-items" style="margin-bottom:24px;"></div><h3 style="font-size:14px;margin-bottom:12px;">Metode Pembayaran</h3><div class="grid-2 mb-4"><button class="btn-outline" id="pm-cash" style="background:var(--primary-main);color:white;" data-action="setPayment" data-val="cash">Tunai</button><button class="btn-outline" id="pm-qris" data-action="setPayment" data-val="qris">QRIS</button><button class="btn-outline" id="pm-transfer" data-action="setPayment" data-val="transfer">Transfer</button><button class="btn-outline" id="pm-ewallet" data-action="setPayment" data-val="ewallet">E-Wallet</button></div><div id="co-cash-group"><div class="form-group"><label class="form-label">Uang Diterima (Rp)</label><input type="number" id="co-cash-received" class="form-input" style="font-size:18px;font-weight:bold;" data-input="calcChange"></div><div class="flex justify-between items-center" style="padding:12px;background:var(--bg-tertiary);border-radius:var(--radius-sm);"><span style="font-size:13px;font-weight:600;">Kembalian</span><span style="font-size:16px;font-weight:700;color:var(--primary-main);" id="co-change">Rp 0</span></div></div></div><div class="sheet-footer"><div class="flex justify-between items-center mb-4"><span style="font-weight:600;color:var(--text-mid);">Total Tagihan</span><span style="font-size:22px;font-weight:700;" id="co-total">Rp 0</span></div><button class="btn-main" id="btn-process-payment" data-action="processPayment">Proses Pembayaran <span class="material-symbols-rounded" style="font-size:20px;">check_circle</span></button></div></div>
+    <div class="bottom-sheet" id="checkout-sheet"><div class="sheet-header"><h2 style="font-size:16px;" id="co-item-count">Checkout</h2><button class="btn-icon" data-action="closeOverlays"><span class="material-symbols-rounded">close</span></button></div><div class="sheet-body"><div id="co-items" style="margin-bottom:24px;"></div><h3 style="font-size:14px;margin-bottom:12px;">Metode Pembayaran</h3><div class="grid-2 mb-4"><button class="btn-outline" id="pm-cash" style="background:var(--primary-main);color:white;" data-action="setPayment" data-val="cash">Tunai</button><button class="btn-outline" id="pm-qris" data-action="setPayment" data-val="qris">QRIS</button><button class="btn-outline" id="pm-transfer" data-action="setPayment" data-val="transfer">Transfer</button><button class="btn-outline" id="pm-ewallet" data-action="setPayment" data-val="ewallet">E-Wallet</button><button class="btn-outline" id="pm-midtrans" data-action="setPayment" data-val="midtrans">Midtrans</button></div><div id="co-cash-group"><div class="form-group"><label class="form-label">Uang Diterima (Rp)</label><input type="number" id="co-cash-received" class="form-input" style="font-size:18px;font-weight:bold;" data-input="calcChange"></div><div class="flex justify-between items-center" style="padding:12px;background:var(--bg-tertiary);border-radius:var(--radius-sm);"><span style="font-size:13px;font-weight:600;">Kembalian</span><span style="font-size:16px;font-weight:700;color:var(--primary-main);" id="co-change">Rp 0</span></div></div></div><div class="sheet-footer"><div class="flex justify-between items-center mb-4"><span style="font-weight:600;color:var(--text-mid);">Total Tagihan</span><span style="font-size:22px;font-weight:700;" id="co-total">Rp 0</span></div><button class="btn-main" id="btn-process-payment" data-action="processPayment">Proses Pembayaran <span class="material-symbols-rounded" style="font-size:20px;">check_circle</span></button></div></div>
     <div class="modal-center receipt" id="receipt-modal"><div id="receipt-content"></div><div class="grid-2 mt-4"><button class="btn-outline" data-action="closeOverlays">Tutup</button><button class="btn-main" style="padding:12px;" data-action="newTransaction">Trx Baru</button></div></div>
     <div class="modal-center" id="alert-modal"><span class="material-symbols-rounded" id="alert-icon" style="font-size:48px;margin-bottom:12px;">info</span><h3 id="alert-title" class="mb-2">Info</h3><p id="alert-msg" class="text-mid mb-4" style="font-size:14px;line-height:1.5;"></p><button class="btn-main" id="alert-btn" data-action="closeOverlays">Mengerti</button></div>
     <div class="overlay flex justify-center items-center flex-col gap-3" id="loading-overlay" style="z-index:9999;background:rgba(255,255,255,.8);"><span class="material-symbols-rounded spinner text-primary" style="font-size:40px;">sync</span><span style="font-weight:600;font-size:14px;color:var(--primary-main);">Memproses...</span></div>
@@ -58,6 +59,7 @@
       transactions: [],
       cart: {},
       dashboard: { salesToday: 0, trxCount: 0, lowStockCount: 0, lowStocks: [] },
+      paymentGateway: { midtrans: { enabled: false, mode: 'sandbox', merchantId: '', clientKeyConfigured: false, serverKeyConfigured: false, clientKey: '' } },
       ui: {
         page: 'dashboard',
         posCategory: 'all',
@@ -139,7 +141,7 @@
     const MockBackend = {
       _db: {
         store: {
-          name: 'Kasira POS Retail',
+          name: 'LitPOS',
           address: 'Jl. Kasira No. 1',
           phone: '0812-0000-1111',
           footer: 'Barang yang dibeli tidak dapat ditukar.'
@@ -154,11 +156,19 @@
           { id: 'item-2', name: 'Air Mineral 600ml', categoryId: 'cat-minum', price: 5000, sku: 'SKU-002', barcode: '', stockQty: 80, minStock: 12, stockManaged: true, isActive: true },
           { id: 'item-3', name: 'Keripik Singkong', categoryId: 'cat-snack', price: 12000, sku: 'SKU-003', barcode: '', stockQty: 4, minStock: 6, stockManaged: true, isActive: true }
         ],
-        transactions: []
+        transactions: [],
+        midtransSettings: {
+          mode: 'sandbox',
+          merchantId: 'G123456',
+          clientKey: 'SB-Mid-client-demo',
+          clientKeyConfigured: true,
+          serverKeyConfigured: true
+        }
       },
       bootstrap() {
         const todayKey = new Date().toDateString();
         const lowStocks = this._db.items.filter((item) => item.isActive && Number(item.stockQty || 0) <= Number(item.minStock || 0));
+        const completedTransactions = this._db.transactions.filter((transaction) => transaction.status === 'Selesai');
         return {
           success: true,
           data: {
@@ -167,10 +177,19 @@
             categories: this._db.categories.map((category) => ({ ...category })),
             transactions: this._db.transactions.map((transaction) => ({ ...transaction })),
             dashboard: {
-              salesToday: this._db.transactions.filter((transaction) => new Date(transaction.timestamp).toDateString() === todayKey).reduce((sum, transaction) => sum + Number(transaction.total || 0), 0),
-              trxCount: this._db.transactions.length,
+              salesToday: completedTransactions.filter((transaction) => new Date(transaction.timestamp).toDateString() === todayKey).reduce((sum, transaction) => sum + Number(transaction.total || 0), 0),
+              trxCount: completedTransactions.length,
               lowStockCount: lowStocks.length,
               lowStocks: lowStocks.map((item) => ({ ...item, categoryName: Utils.categoryName(item.categoryId) }))
+            },
+            paymentGateway: {
+              midtrans: {
+                enabled: !!this._db.midtransSettings.serverKeyConfigured,
+                mode: this._db.midtransSettings.mode,
+                merchantId: this._db.midtransSettings.merchantId,
+                clientKeyConfigured: !!this._db.midtransSettings.clientKeyConfigured,
+                serverKeyConfigured: !!this._db.midtransSettings.serverKeyConfigured
+              }
             }
           }
         };
@@ -214,6 +233,51 @@
           data: { ...receipt, storeInfo: { ...this._db.store } }
         };
       },
+      createMidtransPayment(payload) {
+        const sale = this.saveSale({ ...payload, paymentMethod: 'midtrans', cashReceived: '' });
+        if (!sale.success) return sale;
+        const trx = this._db.transactions[0];
+        const paymentSession = {
+          orderId: trx.trxId,
+          token: 'mock-token-' + trx.trxId,
+          redirectUrl: 'https://app.sandbox.midtrans.com/snap/v3/redirection/mock-' + trx.trxId
+        };
+        trx.status = 'Menunggu Pembayaran';
+        trx.gateway = {
+          provider: 'midtrans',
+          orderId: trx.trxId,
+          transactionId: '',
+          paymentType: '',
+          status: 'pending',
+          token: paymentSession.token,
+          redirectUrl: paymentSession.redirectUrl
+        };
+        return {
+          success: true,
+          data: {
+            ...trx,
+            paymentSession,
+            storeInfo: { ...this._db.store }
+          }
+        };
+      },
+      syncMidtransTransactionStatus(payload) {
+        const trxId = payload && payload.trxId;
+        const trx = this._db.transactions.find((entry) => entry.trxId === trxId);
+        if (!trx) return { success: false, message: 'Transaksi tidak ditemukan.' };
+        if (trx.paymentMethod !== 'midtrans') return { success: false, message: 'Transaksi bukan Midtrans.' };
+        if (trx.status === 'Menunggu Pembayaran') {
+          trx.status = 'Selesai';
+          trx.gateway = {
+            ...(trx.gateway || {}),
+            status: 'settlement',
+            paymentType: 'qris',
+            transactionId: 'mock-midtrans-' + trx.trxId
+          };
+          trx.paidAt = new Date().toISOString();
+        }
+        return { success: true, data: { ...trx, storeInfo: { ...this._db.store } } };
+      },
       saveItem(payload) {
         if (!payload || !payload.name) return { success: false, message: 'Nama produk wajib diisi.' };
         if (payload.id) {
@@ -254,6 +318,31 @@
       saveStoreSettings(payload) {
         this._db.store = { ...this._db.store, ...payload };
         return { success: true, data: { ...this._db.store } };
+      },
+      getMidtransSettings() {
+        return {
+          success: true,
+          data: {
+            enabled: !!this._db.midtransSettings.serverKeyConfigured,
+            mode: this._db.midtransSettings.mode,
+            merchantId: this._db.midtransSettings.merchantId,
+            clientKey: this._db.midtransSettings.clientKey,
+            clientKeyConfigured: !!this._db.midtransSettings.clientKeyConfigured,
+            serverKeyConfigured: !!this._db.midtransSettings.serverKeyConfigured
+          }
+        };
+      },
+      saveMidtransSettings(payload) {
+        const next = payload || {};
+        this._db.midtransSettings = {
+          ...this._db.midtransSettings,
+          mode: next.mode === 'production' ? 'production' : 'sandbox',
+          merchantId: String(typeof next.merchantId === 'undefined' ? this._db.midtransSettings.merchantId : next.merchantId || ''),
+          clientKey: String(typeof next.clientKey === 'undefined' ? this._db.midtransSettings.clientKey : next.clientKey || ''),
+          clientKeyConfigured: String(typeof next.clientKey === 'undefined' ? this._db.midtransSettings.clientKey : next.clientKey || '').trim().length > 0,
+          serverKeyConfigured: next.clearServerKey ? false : (this._db.midtransSettings.serverKeyConfigured || !!String(next.serverKey || '').trim())
+        };
+        return this.getMidtransSettings();
       }
     };
 
@@ -277,11 +366,19 @@
           };
 
           if (typeof google !== 'undefined' && google.script && google.script.run) {
-            const runner = google.script.run.withSuccessHandler(handleSuccess).withFailureHandler(handleFailure);
-            if (typeof payload === 'undefined') {
-              runner[method]();
-            } else {
-              runner[method](payload);
+            try {
+              const runner = google.script.run.withSuccessHandler(handleSuccess).withFailureHandler(handleFailure);
+              const targetMethod = runner[method];
+              if (typeof targetMethod !== 'function') {
+                throw new Error(`Method GAS "${method}" tidak ditemukan di deployment aktif.`);
+              }
+              if (typeof payload === 'undefined') {
+                targetMethod.call(runner);
+              } else {
+                targetMethod.call(runner, payload);
+              }
+            } catch (error) {
+              handleFailure(error);
             }
             return;
           }
@@ -454,11 +551,19 @@
           return;
         }
         root.innerHTML = items.map((transaction) => {
-          const payment = transaction.paymentMethod === 'cash'
+          const methodKey = String(transaction.paymentMethod || '').toLowerCase();
+          const payment = methodKey === 'cash'
             ? 'Tunai'
-            : transaction.paymentMethod
-              ? String(transaction.paymentMethod).toUpperCase()
-              : 'Lunas';
+            : methodKey === 'midtrans'
+              ? 'Midtrans'
+              : methodKey
+                ? methodKey.toUpperCase()
+                : 'Lunas';
+          const status = transaction.status || 'Selesai';
+          const normalizedStatus = String(status).toLowerCase();
+          const statusTag = normalizedStatus === 'selesai'
+            ? 'success'
+            : (normalizedStatus === 'menunggu pembayaran' || normalizedStatus === 'review fraud' ? 'warning' : 'error');
           const itemCount = Number(transaction.itemCount || (Array.isArray(transaction.items) ? transaction.items.reduce((sum, entry) => sum + Number(entry.qty || 0), 0) : 0));
           return `
             <div class="list-card" data-action="viewTxDetail" data-id="${Utils.escape(transaction.trxId || transaction.timestamp)}">
@@ -469,7 +574,8 @@
               </div>
               <div class="flex flex-col" style="align-items:flex-end;gap:6px;">
                 <span style="font-weight:700;font-size:15px;">${Utils.escape(Utils.money(transaction.total))}</span>
-                <span class="tag success">${Utils.escape(payment)}</span>
+                <span class="tag neutral">${Utils.escape(payment)}</span>
+                <span class="tag ${statusTag}">${Utils.escape(status)}</span>
               </div>
             </div>
           `;
@@ -539,11 +645,12 @@
         `).join('');
       },
       laporan() {
-        const totalRevenue = State.transactions.reduce((sum, transaction) => sum + Number(transaction.total || 0), 0);
-        const totalTrx = State.transactions.length;
-        const cashRevenue = State.transactions.filter((transaction) => transaction.paymentMethod === 'cash').reduce((sum, transaction) => sum + Number(transaction.total || 0), 0);
+        const successfulTransactions = State.transactions.filter((transaction) => String(transaction.status || '').toLowerCase() === 'selesai');
+        const totalRevenue = successfulTransactions.reduce((sum, transaction) => sum + Number(transaction.total || 0), 0);
+        const totalTrx = successfulTransactions.length;
+        const cashRevenue = successfulTransactions.filter((transaction) => transaction.paymentMethod === 'cash').reduce((sum, transaction) => sum + Number(transaction.total || 0), 0);
         const topProducts = {};
-        State.transactions.forEach((transaction) => {
+        successfulTransactions.forEach((transaction) => {
           const items = Array.isArray(transaction.items) && transaction.items.length ? transaction.items : Utils.parseLegacyDetail(transaction.detail);
           items.forEach((entry) => {
             if (!topProducts[entry.name]) topProducts[entry.name] = 0;
@@ -594,13 +701,23 @@
             </div>
           </div>
         `).join('');
+        const midtransEnabled = !!(State.paymentGateway && State.paymentGateway.midtrans && State.paymentGateway.midtrans.enabled);
+        if (!midtransEnabled && State.ui.paymentMethod === 'midtrans') {
+          State.ui.paymentMethod = 'cash';
+        }
         document.querySelectorAll('#checkout-sheet [data-action="setPayment"]').forEach((button) => {
+          const isMidtransButton = button.dataset.val === 'midtrans';
+          button.disabled = isMidtransButton && !midtransEnabled;
           const active = button.dataset.val === State.ui.paymentMethod;
+          button.style.opacity = button.disabled ? '.5' : '1';
           button.style.background = active ? 'var(--primary-main)' : 'transparent';
           button.style.color = active ? 'white' : 'var(--primary-main)';
         });
         const cashGroup = document.getElementById('co-cash-group');
         const processButton = document.getElementById('btn-process-payment');
+        processButton.innerHTML = State.ui.paymentMethod === 'midtrans'
+          ? 'Buat Pembayaran Midtrans <span class="material-symbols-rounded" style="font-size:20px;">open_in_new</span>'
+          : 'Proses Pembayaran <span class="material-symbols-rounded" style="font-size:20px;">check_circle</span>';
         if (State.ui.paymentMethod === 'cash') {
           const change = Number(State.ui.cashReceived || 0) - totals.total;
           cashGroup.classList.remove('d-none');
@@ -616,6 +733,32 @@
         document.getElementById('f-set-address').value = State.store.address || '';
         document.getElementById('f-set-phone').value = State.store.phone || '';
         document.getElementById('f-set-footer').value = State.store.footer || '';
+      },
+      prefillMidtransSettings() {
+        const config = State.paymentGateway && State.paymentGateway.midtrans ? State.paymentGateway.midtrans : {};
+        const mode = config.mode === 'production' ? 'production' : 'sandbox';
+        const enabled = !!config.enabled;
+        const serverConfigured = !!config.serverKeyConfigured;
+        const statusTag = document.getElementById('f-mid-status-tag');
+        const serverConfiguredEl = document.getElementById('f-mid-server-configured');
+        const modeLabelEl = document.getElementById('f-mid-mode-label');
+        const modeSelectEl = document.getElementById('f-mid-mode');
+        const merchantIdEl = document.getElementById('f-mid-merchant-id');
+        const clientKeyEl = document.getElementById('f-mid-client-key');
+        const serverKeyEl = document.getElementById('f-mid-server-key');
+        const clearServerEl = document.getElementById('f-mid-clear-server');
+        if (!statusTag || !serverConfiguredEl || !modeLabelEl || !modeSelectEl || !merchantIdEl || !clientKeyEl || !serverKeyEl || !clearServerEl) {
+          return;
+        }
+        statusTag.className = `tag ${enabled ? 'success' : 'warning'}`;
+        statusTag.textContent = enabled ? 'Aktif' : 'Belum Aktif';
+        serverConfiguredEl.textContent = serverConfigured ? 'Sudah' : 'Belum';
+        modeLabelEl.textContent = mode.toUpperCase();
+        modeSelectEl.value = mode;
+        merchantIdEl.value = config.merchantId || '';
+        clientKeyEl.value = config.clientKey || '';
+        serverKeyEl.value = '';
+        clearServerEl.checked = false;
       },
       receipt(receipt) {
         const store = receipt.storeInfo || State.store;
@@ -645,6 +788,10 @@
       },
       txDetail(transaction) {
         const items = Array.isArray(transaction.items) && transaction.items.length ? transaction.items : Utils.parseLegacyDetail(transaction.detail);
+        const status = transaction.status || 'Selesai';
+        const gateway = transaction.gateway || {};
+        const showMidtransSync = String(transaction.paymentMethod || '').toLowerCase() === 'midtrans'
+          && ['selesai', 'refund', 'refund sebagian'].indexOf(String(status).toLowerCase()) === -1;
         document.getElementById('tx-detail-title').textContent = transaction.trxId || 'Detail Transaksi';
         document.getElementById('tx-detail-container').innerHTML = `
           <div class="card mb-4" style="text-align:center;">
@@ -665,6 +812,21 @@
               <span>TOTAL</span>
               <span class="text-primary">${Utils.escape(Utils.money(transaction.total))}</span>
             </div>
+            <div class="flex justify-between mt-2" style="font-size:13px;color:var(--text-mid);">
+              <span>Status</span>
+              <span>${Utils.escape(status)}</span>
+            </div>
+            ${String(transaction.paymentMethod || '').toLowerCase() === 'midtrans' ? `
+              <div class="flex justify-between mt-2" style="font-size:13px;color:var(--text-mid);">
+                <span>Gateway</span>
+                <span>${Utils.escape((gateway.status || '-').toUpperCase())}</span>
+              </div>
+            ` : ''}
+            ${showMidtransSync ? `
+              <button class="btn-main mt-4" data-action="checkMidtransStatus" data-id="${Utils.escape(transaction.trxId || '')}">
+                Cek Status Midtrans
+              </button>
+            ` : ''}
           </div>
         `;
       }
@@ -691,8 +853,23 @@
         })) : [];
         State.transactions = Array.isArray(data.transactions) ? data.transactions.map((transaction) => ({
           ...transaction,
-          items: Array.isArray(transaction.items) ? transaction.items : []
+          items: Array.isArray(transaction.items) ? transaction.items : [],
+          gateway: transaction.gateway || {}
         })) : [];
+        const gateway = data.paymentGateway || {};
+        State.paymentGateway = {
+          midtrans: {
+            enabled: !!(gateway.midtrans && gateway.midtrans.enabled),
+            mode: gateway.midtrans && gateway.midtrans.mode ? gateway.midtrans.mode : 'sandbox',
+            merchantId: gateway.midtrans && gateway.midtrans.merchantId ? gateway.midtrans.merchantId : '',
+            clientKeyConfigured: !!(gateway.midtrans && gateway.midtrans.clientKeyConfigured),
+            serverKeyConfigured: !!(gateway.midtrans && gateway.midtrans.serverKeyConfigured),
+            clientKey: gateway.midtrans && gateway.midtrans.clientKey ? gateway.midtrans.clientKey : ''
+          }
+        };
+        if (!State.paymentGateway.midtrans.enabled && State.ui.paymentMethod === 'midtrans') {
+          State.ui.paymentMethod = 'cash';
+        }
         const dashboard = data.dashboard || {};
         State.dashboard = {
           salesToday: Number(dashboard.salesToday || 0),
@@ -701,6 +878,22 @@
           lowStocks: Array.isArray(dashboard.lowStocks) ? dashboard.lowStocks : (Array.isArray(dashboard.lowStockItems) ? dashboard.lowStockItems : [])
         };
         Actions.reconcileCart();
+      },
+      applyMidtransSettingsData(data) {
+        const source = data || {};
+        const mode = source.mode === 'production' ? 'production' : 'sandbox';
+        State.paymentGateway = {
+          ...State.paymentGateway,
+          midtrans: {
+            ...(State.paymentGateway.midtrans || {}),
+            enabled: !!source.enabled,
+            mode,
+            merchantId: source.merchantId || '',
+            clientKey: source.clientKey || '',
+            clientKeyConfigured: !!source.clientKeyConfigured,
+            serverKeyConfigured: !!source.serverKeyConfigured
+          }
+        };
       },
       renderAll() {
         Render.populateCategoryOptions('');
@@ -714,6 +907,7 @@
         Render.stokList();
         Render.laporan();
         Render.prefillSettings();
+        Render.prefillMidtransSettings();
         Render.page(State.ui.page);
       },
       async refreshData(options = {}) {
@@ -728,6 +922,19 @@
           }
           if (options.throwOnError) {
             throw error;
+          }
+          return null;
+        }
+      },
+      async loadMidtransSettings(options = {}) {
+        try {
+          const data = await API.call('getMidtransSettings');
+          Actions.applyMidtransSettingsData(data);
+          Render.prefillMidtransSettings();
+          return data;
+        } catch (error) {
+          if (!options.silent) {
+            Render.alert('error', 'Gagal Memuat Midtrans', error.message || 'Tidak bisa memuat pengaturan Midtrans.');
           }
           return null;
         }
@@ -770,6 +977,10 @@
         if (subId === 'sub-stok') Render.stokList();
         if (subId === 'sub-laporan') Render.laporan();
         if (subId === 'sub-pengaturan') Render.prefillSettings();
+        if (subId === 'sub-midtrans') {
+          Render.prefillMidtransSettings();
+          Actions.loadMidtransSettings({ silent: true });
+        }
         Actions.setSubPage(subId, true);
       },
       closeSubPage(_, event) {
@@ -851,7 +1062,12 @@
         document.getElementById('checkout-sheet').classList.add('show');
       },
       setPayment(data) {
-        State.ui.paymentMethod = data.val || 'cash';
+        const requested = data.val || 'cash';
+        if (requested === 'midtrans' && !(State.paymentGateway && State.paymentGateway.midtrans && State.paymentGateway.midtrans.enabled)) {
+          State.ui.paymentMethod = 'cash';
+        } else {
+          State.ui.paymentMethod = requested;
+        }
         Render.checkoutSheet();
       },
       calcChange(value) {
@@ -870,6 +1086,59 @@
           cashReceived: State.ui.paymentMethod === 'cash' ? Number(State.ui.cashReceived || 0) : ''
         };
         try {
+          if (State.ui.paymentMethod === 'midtrans') {
+            const response = await API.call('createMidtransPayment', payload);
+            State.cart = {};
+            State.ui.cashReceived = 0;
+            await Actions.refreshData({ silent: true, throwOnError: true });
+            Actions.closeOverlays();
+            const token = response && response.paymentSession ? response.paymentSession.token : '';
+            const redirectUrl = response && response.paymentSession ? response.paymentSession.redirectUrl : '';
+            
+            if (token) {
+              const config = State.paymentGateway && State.paymentGateway.midtrans ? State.paymentGateway.midtrans : {};
+              const snapJsUrl = config.mode === 'production' 
+                ? 'https://app.midtrans.com/snap/snap.js'
+                : 'https://app.sandbox.midtrans.com/snap/snap.js';
+              const clientKey = config.clientKey || '';
+              
+              if (!window.snap) {
+                await new Promise((resolve, reject) => {
+                  const script = document.createElement('script');
+                  script.src = snapJsUrl;
+                  script.setAttribute('data-client-key', clientKey);
+                  script.onload = resolve;
+                  script.onerror = () => reject(new Error('Gagal memuat Snap JS Midtrans.'));
+                  document.head.appendChild(script);
+                });
+              }
+
+              window.snap.pay(token, {
+                onSuccess: function(result) {
+                  Actions.checkMidtransStatus({ id: response.trxId });
+                  Render.page('history');
+                },
+                onPending: function(result) {
+                  Render.alert('info', 'Menunggu Pembayaran', 'Selesaikan pembayaran pada popup Snap atau cek riwayat transaksi.');
+                  Render.page('history');
+                },
+                onError: function(result) {
+                  Render.alert('error', 'Pembayaran Gagal', 'Terjadi kesalahan saat memproses pembayaran Midtrans.');
+                  Render.page('history');
+                },
+                onClose: function() {
+                  Render.alert('warning', 'Pembayaran Tertunda', 'Popup Midtrans ditutup sebelum pembayaran diselesaikan.');
+                  Render.page('history');
+                }
+              });
+            } else if (redirectUrl) {
+              window.open(redirectUrl, '_blank', 'noopener');
+              Render.alert('info', 'Transaksi Midtrans Dibuat', `Status pembayaran masih pending. Cek status di riwayat transaksi. ID: ${response && response.trxId ? response.trxId : '-'}`);
+              Render.page('history');
+            }
+            return;
+          }
+
           const receipt = await API.call('saveSale', payload);
           State.cart = {};
           State.ui.cashReceived = 0;
@@ -893,6 +1162,24 @@
         }
         Render.txDetail(transaction);
         Actions.setSubPage('sub-tx-detail', true);
+      },
+      async checkMidtransStatus(data) {
+        const trxId = data && data.id ? data.id : '';
+        if (!trxId) {
+          Render.alert('error', 'Data Hilang', 'ID transaksi tidak valid.');
+          return;
+        }
+        try {
+          await API.call('syncMidtransTransactionStatus', { trxId });
+          await Actions.refreshData({ silent: true, throwOnError: true });
+          const transaction = State.transactions.find((entry) => (entry.trxId || entry.timestamp) === trxId);
+          if (transaction) {
+            Render.txDetail(transaction);
+          }
+          Render.alert('success', 'Status Diperbarui', 'Status Midtrans berhasil disinkronkan.');
+        } catch (error) {
+          Render.alert('error', 'Sinkronisasi Gagal', error.message || 'Gagal mengambil status Midtrans.');
+        }
       },
       resetProductForm() {
         document.getElementById('prod-form-title').textContent = 'Tambah Produk';
@@ -1049,6 +1336,28 @@
           Render.alert('success', 'Sukses', 'Pengaturan berhasil disimpan.');
         } catch (error) {
           Render.alert('error', 'Gagal', error.message || 'Gagal menyimpan pengaturan.');
+        }
+      },
+      async submitMidtransSettings() {
+        const payload = {
+          mode: document.getElementById('f-mid-mode').value,
+          merchantId: document.getElementById('f-mid-merchant-id').value.trim(),
+          clientKey: document.getElementById('f-mid-client-key').value.trim(),
+          serverKey: document.getElementById('f-mid-server-key').value.trim(),
+          clearServerKey: document.getElementById('f-mid-clear-server').checked
+        };
+        if (payload.clearServerKey && payload.serverKey) {
+          Render.alert('error', 'Validasi', 'Pilih salah satu: update server key atau hapus server key.');
+          return;
+        }
+        try {
+          const saved = await API.call('saveMidtransSettings', payload);
+          Actions.applyMidtransSettingsData(saved);
+          Render.prefillMidtransSettings();
+          await Actions.refreshData({ silent: true, throwOnError: true });
+          Render.alert('success', 'Sukses', 'Pengaturan Midtrans berhasil disimpan.');
+        } catch (error) {
+          Render.alert('error', 'Gagal', error.message || 'Gagal menyimpan Midtrans.');
         }
       }
     };
